@@ -1,0 +1,61 @@
+object formMain: TformMain
+  Left = 426
+  Height = 441
+  Top = 198
+  Width = 461
+  Caption = 'EnvMan4J'
+  ClientHeight = 441
+  ClientWidth = 461
+  LCLVersion = '1.0.1.3'
+  object edtPath: TLabeledEdit
+    Left = 40
+    Height = 21
+    Top = 8
+    Width = 368
+    EditLabel.AnchorSideTop.Control = edtPath
+    EditLabel.AnchorSideTop.Side = asrCenter
+    EditLabel.AnchorSideRight.Control = edtPath
+    EditLabel.AnchorSideBottom.Control = edtPath
+    EditLabel.AnchorSideBottom.Side = asrBottom
+    EditLabel.Left = 14
+    EditLabel.Height = 14
+    EditLabel.Top = 11
+    EditLabel.Width = 23
+    EditLabel.Caption = 'Path'
+    EditLabel.ParentColor = False
+    LabelPosition = lpLeft
+    TabOrder = 0
+  end
+  object Button1: TButton
+    Left = 416
+    Height = 22
+    Top = 8
+    Width = 104
+    Caption = 'Select directory'
+    TabOrder = 1
+    Visible = False
+  end
+  object listBoxEnvVars: TListBox
+    Left = 40
+    Height = 328
+    Top = 40
+    Width = 368
+    ItemHeight = 0
+    OnDblClick = listBoxEnvVarsDblClick
+    TabOrder = 2
+  end
+  object memoLog: TMemo
+    Left = 8
+    Height = 47
+    Top = 376
+    Width = 399
+    Lines.Strings = (
+      'memoLog'
+    )
+    TabOrder = 3
+  end
+  object SelectDirectoryDialog1: TSelectDirectoryDialog
+    left = 16
+    top = 72
+  end
+end
