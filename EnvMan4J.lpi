@@ -31,15 +31,18 @@
         <CommandLineParams Value="-p c:\JAVA\commons-logging-1.1.1"/>
       </local>
     </RunParams>
-    <RequiredPackages Count="2">
+    <RequiredPackages Count="3">
       <Item1>
-        <PackageName Value="LazControls"/>
+        <PackageName Value="SynEdit"/>
       </Item1>
       <Item2>
-        <PackageName Value="LCL"/>
+        <PackageName Value="LazControls"/>
       </Item2>
+      <Item3>
+        <PackageName Value="LCL"/>
+      </Item3>
     </RequiredPackages>
-    <Units Count="3">
+    <Units Count="4">
       <Unit0>
         <Filename Value="EnvMan4J.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -58,6 +61,13 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="EnvVarSave"/>
       </Unit2>
+      <Unit3>
+        <Filename Value="unithelp.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="formHelp"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="unithelp"/>
+      </Unit3>
     </Units>
   </ProjectOptions>
   <CompilerOptions>

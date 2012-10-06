@@ -5,22 +5,35 @@ unit unitMain;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, ListFilterEdit, Forms, Controls, Graphics,
-  Dialogs, ExtCtrls, ValEdit, StdCtrls, EditBtn, FileCtrl, Grids, CheckLst;
+  Classes, SysUtils, FileUtil, ListFilterEdit, SynHighlighterHTML,
+  SynExportHTML, SynMemo, Forms, Controls, Graphics, Dialogs, ExtCtrls, ValEdit,
+  StdCtrls, EditBtn, FileCtrl, Grids, CheckLst, ActnList;
 
 type
 
   { TformMain }
 
   TformMain = class(TForm)
+    actSelectDirectory: TAction;
+    CheckBox1: TCheckBox;
+    CheckBox2: TCheckBox;
+    edtNewVar: TLabeledEdit;
+    mainActionList: TActionList;
     Button1: TButton;
+    Button2: TButton;
     edtPath: TLabeledEdit;
     listBoxEnvVars: TListBox;
-    memoLog: TMemo;
-    SelectDirectoryDialog1: TSelectDirectoryDialog;
+    selDir: TSelectDirectoryDialog;
+    StaticText1: TStaticText;
+    procedure actSelectDirectoryExecute(Sender: TObject);
+    procedure FormShow(Sender: TObject);
     procedure listBoxEnvVarsDblClick(Sender: TObject);
+    procedure listBoxEnvVarsKeyPress(Sender: TObject; var Key: char);
+    procedure listBoxEnvVarsKeyUp(Sender: TObject; var Key: Word;
+      Shift: TShiftState);
   private
     procedure FillEnvVariables;
+    procedure ChangeEnvVariable;
     { private declarations }
   public
     { public declarations }
@@ -36,16 +49,44 @@ uses
 {$R *.lfm}
 
 procedure TformMain.listBoxEnvVarsDblClick(Sender: TObject);
+begin
+  ChangeEnvVariable;
+end;
+
+procedure TformMain.ChangeEnvVariable;
 var
   selName,value :String;
 begin
-  memoLog.Append('cliked on ::' + listBoxEnvVars.GetSelectedText);
   //save env variable
   listBoxEnvVars.Items.GetNameValue(listBoxEnvVars.ItemIndex,
       selName, value);
   SetGlobalEnvironment(selName,edtPath.Text,false);
   //fill model
   FillEnvVariables;
+end;
+
+
+procedure TformMain.listBoxEnvVarsKeyPress(Sender: TObject; var Key: char);
+begin
+
+end;
+
+procedure TformMain.listBoxEnvVarsKeyUp(Sender: TObject; var Key: Word;
+  Shift: TShiftState);
+begin
+  if Key = 13then
+     ChangeEnvVariable;
+end;
+
+procedure TformMain.actSelectDirectoryExecute(Sender: TObject);
+begin
+    if selDir.Execute then
+      edtPath.Text:= selDir.FileName;
+end;
+
+procedure TformMain.FormShow(Sender: TObject);
+begin
+  listBoxEnvVars.SetFocus;
 end;
 
 procedure TformMain.FillEnvVariables;
@@ -74,8 +115,6 @@ begin
 
   Path := Application.GetOptionValue('p', 'path');
   Variable := Application.GetOptionValue('v', 'var');
-  memoLog.Append('path ::' + Path);
-  memoLog.Append('var  ::' + Variable);
   edtPath.Text := Path;
   //Add environment variables to listbox
   FillEnvVariables;
