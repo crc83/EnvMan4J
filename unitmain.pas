@@ -31,14 +31,19 @@ var
   formMain: TformMain;
 
 implementation
-
+uses
+  EnvVarSave;
 {$R *.lfm}
 
 procedure TformMain.listBoxEnvVarsDblClick(Sender: TObject);
+var
+  selName,value :String;
 begin
   memoLog.Append('cliked on ::' + listBoxEnvVars.GetSelectedText);
   //save env variable
-  SetEnvironmentVariable('ROO_HOME','EEE');
+  listBoxEnvVars.Items.GetNameValue(listBoxEnvVars.ItemIndex,
+      selName, value);
+  SetGlobalEnvironment(selName,edtPath.Text,false);
   //fill model
   FillEnvVariables;
 end;
