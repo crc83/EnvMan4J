@@ -1,88 +1,102 @@
 object formMain: TformMain
   Left = 212
-  Height = 375
+  Height = 484
   Top = 200
-  Width = 548
+  Width = 504
   Caption = 'EnvMan4J'
-  ClientHeight = 375
-  ClientWidth = 548
+  ClientHeight = 465
+  ClientWidth = 504
+  Menu = mainMenu
   OnShow = FormShow
   LCLVersion = '1.0.1.3'
-  object edtPath: TLabeledEdit
-    Left = 40
-    Height = 21
-    Top = 8
-    Width = 368
-    EditLabel.AnchorSideTop.Control = edtPath
-    EditLabel.AnchorSideTop.Side = asrCenter
-    EditLabel.AnchorSideRight.Control = edtPath
-    EditLabel.AnchorSideBottom.Control = edtPath
-    EditLabel.AnchorSideBottom.Side = asrBottom
-    EditLabel.Left = 14
-    EditLabel.Height = 14
-    EditLabel.Top = 11
-    EditLabel.Width = 23
-    EditLabel.Caption = 'Path'
-    EditLabel.ParentColor = False
-    LabelPosition = lpLeft
-    TabOrder = 0
+  object StatusBar1: TStatusBar
+    Left = 0
+    Height = 20
+    Top = 445
+    Width = 504
+    Panels = <>
   end
-  object Button1: TButton
-    Left = 416
-    Height = 22
-    Top = 8
-    Width = 128
-    Caption = '[Ctrl-Z] Select directory'
-    OnClick = actSelectDirectoryExecute
+  object pnlBottom: TPanel
+    Left = 0
+    Height = 381
+    Top = 64
+    Width = 504
+    Align = alClient
+    BevelOuter = bvNone
+    ClientHeight = 381
+    ClientWidth = 504
     TabOrder = 1
+    object listBoxEnvVars: TListBox
+      Left = 39
+      Height = 381
+      Top = 0
+      Width = 465
+      Align = alClient
+      ItemHeight = 0
+      OnDblClick = listBoxEnvVarsDblClick
+      OnKeyPress = listBoxEnvVarsKeyPress
+      OnKeyUp = listBoxEnvVarsKeyUp
+      TabOrder = 0
+    end
+    object pnlLeftBottom: TPanel
+      Left = 0
+      Height = 381
+      Top = 0
+      Width = 39
+      Align = alLeft
+      BevelOuter = bvNone
+      TabOrder = 1
+    end
   end
-  object listBoxEnvVars: TListBox
-    Left = 40
-    Height = 304
-    Top = 64
-    Width = 368
-    ItemHeight = 0
-    OnDblClick = listBoxEnvVarsDblClick
-    OnKeyPress = listBoxEnvVarsKeyPress
-    OnKeyUp = listBoxEnvVarsKeyUp
+  object pnlTop: TPanel
+    Left = 0
+    Height = 64
+    Top = 0
+    Width = 504
+    Align = alTop
+    BevelOuter = bvNone
+    ClientHeight = 64
+    ClientWidth = 504
     TabOrder = 2
-  end
-  object Button2: TButton
-    Left = 416
-    Height = 22
-    Top = 36
-    Width = 128
-    Caption = '[F3] Set to new variable'
-    TabOrder = 3
-    Visible = False
-  end
-  object edtNewVar: TLabeledEdit
-    Left = 40
-    Height = 21
-    Top = 36
-    Width = 368
-    EditLabel.AnchorSideTop.Control = edtNewVar
-    EditLabel.AnchorSideTop.Side = asrCenter
-    EditLabel.AnchorSideRight.Control = edtNewVar
-    EditLabel.AnchorSideBottom.Control = edtNewVar
-    EditLabel.AnchorSideBottom.Side = asrBottom
-    EditLabel.Left = 14
-    EditLabel.Height = 14
-    EditLabel.Top = 39
-    EditLabel.Width = 23
-    EditLabel.Caption = 'New'
-    EditLabel.ParentColor = False
-    LabelPosition = lpLeft
-    TabOrder = 4
-    Visible = False
-  end
-  object StaticText1: TStaticText
-    Left = 432
-    Height = 17
-    Top = 64
-    Width = 104
-    Caption = 'Press "Enter" to set'
-    TabOrder = 5
+    object edtPath: TLabeledEdit
+      Left = 40
+      Height = 21
+      Top = 8
+      Width = 464
+      EditLabel.AnchorSideTop.Control = edtPath
+      EditLabel.AnchorSideTop.Side = asrCenter
+      EditLabel.AnchorSideRight.Control = edtPath
+      EditLabel.AnchorSideBottom.Control = edtPath
+      EditLabel.AnchorSideBottom.Side = asrBottom
+      EditLabel.Left = 14
+      EditLabel.Height = 14
+      EditLabel.Top = 11
+      EditLabel.Width = 23
+      EditLabel.Caption = 'Path'
+      EditLabel.ParentColor = False
+      LabelPosition = lpLeft
+      TabOrder = 0
+    end
+    object edtNewVar: TLabeledEdit
+      Left = 39
+      Height = 21
+      Top = 32
+      Width = 465
+      EditLabel.AnchorSideTop.Control = edtNewVar
+      EditLabel.AnchorSideTop.Side = asrCenter
+      EditLabel.AnchorSideRight.Control = edtNewVar
+      EditLabel.AnchorSideBottom.Control = edtNewVar
+      EditLabel.AnchorSideBottom.Side = asrBottom
+      EditLabel.Left = 13
+      EditLabel.Height = 14
+      EditLabel.Top = 35
+      EditLabel.Width = 23
+      EditLabel.Caption = 'New'
+      EditLabel.ParentColor = False
+      LabelPosition = lpLeft
+      TabOrder = 1
+      Visible = False
+    end
   end
   object selDir: TSelectDirectoryDialog
     Title = 'Select directory'
@@ -93,9 +107,36 @@ object formMain: TformMain
     left = 439
     top = 192
     object actSelectDirectory: TAction
-      Caption = 'Select Directory'
+      Caption = 'Change path'
       OnExecute = actSelectDirectoryExecute
       ShortCut = 16474
+    end
+    object actOptions: TAction
+      Caption = 'Options'
+    end
+    object actNewVar: TAction
+      Caption = 'New variable'
+      ShortCut = 16472
+    end
+    object actUssage: TAction
+      Caption = 'How to use'
+      OnExecute = actUssageExecute
+    end
+  end
+  object mainMenu: TMainMenu
+    left = 8
+    top = 88
+    object miChagePath: TMenuItem
+      Action = actSelectDirectory
+    end
+    object MenuItem1: TMenuItem
+      Action = actNewVar
+    end
+    object miOptions: TMenuItem
+      Action = actOptions
+    end
+    object miHelp: TMenuItem
+      Caption = 'Help'
     end
   end
 end

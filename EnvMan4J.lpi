@@ -65,6 +65,7 @@
         <Filename Value="unithelp.pas"/>
         <IsPartOfProject Value="True"/>
         <ComponentName Value="formHelp"/>
+        <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="unithelp"/>
       </Unit3>

@@ -7,23 +7,33 @@ interface
 uses
   Classes, SysUtils, FileUtil, ListFilterEdit, SynHighlighterHTML,
   SynExportHTML, SynMemo, Forms, Controls, Graphics, Dialogs, ExtCtrls, ValEdit,
-  StdCtrls, EditBtn, FileCtrl, Grids, CheckLst, ActnList;
+  StdCtrls, EditBtn, FileCtrl, Grids, CheckLst, ActnList, Menus, ComCtrls;
 
 type
 
   { TformMain }
 
   TformMain = class(TForm)
+    actUssage: TAction;
+    actNewVar: TAction;
+    actOptions: TAction;
     actSelectDirectory: TAction;
     edtNewVar: TLabeledEdit;
     mainActionList: TActionList;
-    Button1: TButton;
-    Button2: TButton;
     edtPath: TLabeledEdit;
     listBoxEnvVars: TListBox;
+    mainMenu: TMainMenu;
+    MenuItem1: TMenuItem;
+    miChagePath: TMenuItem;
+    miHelp: TMenuItem;
+    miOptions: TMenuItem;
+    pnlTop: TPanel;
+    pnlLeftBottom: TPanel;
+    pnlBottom: TPanel;
     selDir: TSelectDirectoryDialog;
-    StaticText1: TStaticText;
+    StatusBar1: TStatusBar;
     procedure actSelectDirectoryExecute(Sender: TObject);
+    procedure actUssageExecute(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure listBoxEnvVarsDblClick(Sender: TObject);
     procedure listBoxEnvVarsKeyPress(Sender: TObject; var Key: char);
@@ -43,7 +53,7 @@ var
 
 implementation
 uses
-  EnvVarSave;
+  EnvVarSave, unithelp;
 {$R *.lfm}
 
 procedure TformMain.listBoxEnvVarsDblClick(Sender: TObject);
@@ -72,7 +82,7 @@ end;
 procedure TformMain.listBoxEnvVarsKeyUp(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
-  if Key = 13then
+  if Key = 13 then
      ChangeEnvVariable;
 end;
 
@@ -80,6 +90,11 @@ procedure TformMain.actSelectDirectoryExecute(Sender: TObject);
 begin
     if selDir.Execute then
       edtPath.Text:= selDir.FileName;
+end;
+
+procedure TformMain.actUssageExecute(Sender: TObject);
+begin
+    formHelp.ShowModal;
 end;
 
 procedure TformMain.FormShow(Sender: TObject);
