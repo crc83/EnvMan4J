@@ -6,8 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, ListFilterEdit, SynHighlighterHTML,
-  SynExportHTML, SynMemo, Forms, Controls, Graphics, Dialogs, ExtCtrls, ValEdit,
-  StdCtrls, EditBtn, FileCtrl, Grids, CheckLst, ActnList, Menus, ComCtrls;
+  Forms, Controls, Graphics, Dialogs, ExtCtrls, StdCtrls, EditBtn, Grids, ActnList, Menus, ComCtrls, unitSettings;
 
 type
 
@@ -32,14 +31,15 @@ type
     pnlBottom: TPanel;
     selDir: TSelectDirectoryDialog;
     StatusBar1: TStatusBar;
+    procedure actOptionsExecute(Sender: TObject);
     procedure actSelectDirectoryExecute(Sender: TObject);
     procedure actUssageExecute(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure listBoxEnvVarsDblClick(Sender: TObject);
-    procedure listBoxEnvVarsKeyPress(Sender: TObject; var Key: char);
     procedure listBoxEnvVarsKeyUp(Sender: TObject; var Key: Word;
       Shift: TShiftState);
   private
+    settings :TSettingsRecord;
     procedure FillEnvVariables;
     procedure ChangeEnvVariable;
     { private declarations }
@@ -47,6 +47,9 @@ type
     { public declarations }
     constructor Create(TheOwner: TComponent); override;
   end;
+
+
+  function RemoveTrailingSlashes(S: String):String;
 
 var
   formMain: TformMain;
@@ -63,33 +66,48 @@ end;
 
 procedure TformMain.ChangeEnvVariable;
 var
-  selName,value :String;
+  variable,oldValue, newValue :String;
+  path:String;
 begin
   //save env variable
   listBoxEnvVars.Items.GetNameValue(listBoxEnvVars.ItemIndex,
-      selName, value);
-  SetGlobalEnvironment(selName,edtPath.Text,false);
+      variable, oldValue);
+  newValue := RemoveTrailingSlashes(edtPath.Text);
+  SetGlobalEnvironment(variable,newValue,false);
+  if settings.useHardcodedPathes then begin
+    oldValue := RemoveTrailingSlashes(oldValue);
+    path := GetEnvironmentVariable('PATH');
+    path := StringReplace(path,oldValue,newValue, [rfReplaceAll, rfIgnoreCase]);
+    SetGlobalEnvironment('PATH',path,false);
+  end;
   //fill model
   FillEnvVariables;
-end;
-
-
-procedure TformMain.listBoxEnvVarsKeyPress(Sender: TObject; var Key: char);
-begin
-
 end;
 
 procedure TformMain.listBoxEnvVarsKeyUp(Sender: TObject; var Key: Word;
   Shift: TShiftState);
 begin
-  if Key = 13 then
+  if Key = 13 then begin
      ChangeEnvVariable;
+     if settings.closeOnEnter then
+       Exit;
+  end;
 end;
 
 procedure TformMain.actSelectDirectoryExecute(Sender: TObject);
 begin
     if selDir.Execute then
       edtPath.Text:= selDir.FileName;
+end;
+
+procedure TformMain.actOptionsExecute(Sender: TObject);
+begin
+     frmSettings.setSettingsToUI(settings);
+     frmSettings.ShowModal;
+     if frmSettings.ModalResult = mrOK then begin
+        settings := frmSettings.getSettingsFromUI;
+        frmSettings.saveSettings(settings);
+     end;
 end;
 
 procedure TformMain.actUssageExecute(Sender: TObject);
@@ -105,16 +123,19 @@ end;
 procedure TformMain.FillEnvVariables;
 var
   EnvVarName: string;
-  I: integer;
+  I, J: integer;
 begin
   listBoxEnvVars.Clear;
   for I := 0 to GetEnvironmentVariableCount - 1 do
   begin
     EnvVarName := GetEnvironmentString(I);
     //filter only JAVA related variables
-    if pos('_HOME', EnvVarName) > 0 then
-      listBoxEnvVars.AddItem(EnvVarName, TObject(GetEnvironmentVariable(
-        EnvVarName)));
+    for J:=0 to settings.filterList.Count-1 do begin
+        if pos(settings.filterList.Strings[J], EnvVarName) > 0 then
+              listBoxEnvVars.AddItem(EnvVarName, TObject(GetEnvironmentVariable(
+                                                 EnvVarName)));
+
+    end;
   end;
 end;
 
@@ -122,15 +143,29 @@ constructor TformMain.Create(TheOwner: TComponent);
 var
   Path: string;
   Variable: string;
+  AStrList:TStringList;
 begin
   inherited;
+  //load settings
+  settings := frmSettings.loadSettings;
   //Add path from command line
+  if Application.HasOption('p', 'path') then
+    Path := RemoveTrailingSlashes(Application.GetOptionValue('p', 'path'));
 
-  Path := Application.GetOptionValue('p', 'path');
-  Variable := Application.GetOptionValue('v', 'var');
   edtPath.Text := Path;
   //Add environment variables to listbox
   FillEnvVariables;
+end;
+
+function RemoveTrailingSlashes(S: String):String;
+var
+  S1: String;
+begin
+  S1 :=S[Length(S)];
+  if (S[Length(S)] = '\') or (S[Length(S)] = '/') then begin
+     Result := LeftStr(S,Length(S)-1);
+  end else
+      Result := s;
 end;
 
 end.

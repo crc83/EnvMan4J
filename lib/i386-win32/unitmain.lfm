@@ -34,7 +34,6 @@ object formMain: TformMain
       Align = alClient
       ItemHeight = 0
       OnDblClick = listBoxEnvVarsDblClick
-      OnKeyPress = listBoxEnvVarsKeyPress
       OnKeyUp = listBoxEnvVarsKeyUp
       TabOrder = 0
     end
@@ -87,10 +86,10 @@ object formMain: TformMain
       EditLabel.AnchorSideRight.Control = edtNewVar
       EditLabel.AnchorSideBottom.Control = edtNewVar
       EditLabel.AnchorSideBottom.Side = asrBottom
-      EditLabel.Left = 13
+      EditLabel.Left = 14
       EditLabel.Height = 14
       EditLabel.Top = 35
-      EditLabel.Width = 23
+      EditLabel.Width = 22
       EditLabel.Caption = 'New'
       EditLabel.ParentColor = False
       LabelPosition = lpLeft
@@ -112,7 +111,8 @@ object formMain: TformMain
       ShortCut = 16474
     end
     object actOptions: TAction
-      Caption = 'Options'
+      Caption = 'Settings'
+      OnExecute = actOptionsExecute
     end
     object actNewVar: TAction
       Caption = 'New variable'
