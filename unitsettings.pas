@@ -15,6 +15,7 @@ type
     closeOnEnter : Boolean;
     addNewVarToPath : Boolean;
     useHardcodedPathes : Boolean;
+    userVariables:Boolean;//use USER vs SYSTEM variables
   end;
 
 
@@ -68,6 +69,7 @@ begin
      Result.addNewVarToPath:=ini.ReadBool(GENERAL,ADD_NEW_VAR_TO_PATH,true);
      Result.closeOnEnter:=ini.ReadBool(GENERAL,CLOSE_ON_ERROR,true);
      Result.useHardcodedPathes:=ini.ReadBool(GENERAL,USE_HARDCODED_PATHES,false);
+     Result.userVariables:= true;
 end;
 
 function TfrmSettings.getSettingsFromUI:TSettingsRecord;
